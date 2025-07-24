@@ -27,3 +27,5 @@ rootProject.name = "BattleLine"
 
 include(":jvm")
 include(":shared")
+
+include(":domain")
