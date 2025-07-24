@@ -1,0 +1,3 @@
+[plugins]
+kotlin-jvm = { id = "com.wsr.jvm", version = "unspecified" }
+kotlin-multiplatform = { id = "com.wsr.multiplatform", version = "unspecified" }
