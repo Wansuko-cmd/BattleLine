@@ -29,3 +29,4 @@ include(":jvm")
 include(":shared")
 
 include(":domain")
+include(":cui")
