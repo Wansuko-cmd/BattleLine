@@ -39,10 +39,7 @@ private fun BattleLine.processByCPU() = when (this) {
     is Phase.Finish -> this
 }
 
-private fun readHand(
-    hand: List<Troop>,
-    lines: List<Line>,
-): Pair<Troop, Line> {
+private fun readHand(hand: List<Troop>, lines: List<Line>): Pair<Troop, Line> {
     println(
         "置ける場所:\n${
             lines.mapIndexed { index, line -> "$index: ${line.toDisplayString()}" }

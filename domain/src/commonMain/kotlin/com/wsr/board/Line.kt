@@ -17,10 +17,7 @@ data class Line private constructor(
             Player.Right -> right is InComplete
         }
 
-    fun place(
-        troop: Troop,
-        player: Player,
-    ) = when (player) {
+    fun place(troop: Troop, player: Player) = when (player) {
         Player.Left ->
             when (left) {
                 is InComplete -> copy(left = left.place(troop))
@@ -34,7 +31,7 @@ data class Line private constructor(
             }
     }
 
-    fun claimFlag(player: Player) = when {
+    fun claimFlag(player: Player, blind: List<Troop>) = when {
         owner != null -> this
         left is Complete && right is Complete ->
             when {
@@ -44,6 +41,15 @@ data class Line private constructor(
                 else -> copy(owner = player.switch())
             }
 
+        left is Complete && right is InComplete -> when {
+            left.formation > right.formatable(blind) -> copy(owner = Player.Left)
+            else -> this
+        }
+
+        left is InComplete && right is Complete -> when {
+            left.formatable(blind) < right.formation -> copy(owner = Player.Right)
+            else -> this
+        }
         else -> this
     }
 

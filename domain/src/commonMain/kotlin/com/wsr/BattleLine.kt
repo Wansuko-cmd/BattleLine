@@ -17,14 +17,13 @@ sealed interface BattleLine {
 }
 
 sealed interface Phase : BattleLine {
-    data class Place(
-        override val board: Board,
-        override val turn: Player,
-    ) : Phase {
+    data class Place(override val board: Board, override val turn: Player) : Phase {
         private val hand = if (turn == Player.Left) board.leftHand else board.rightHand
         private val validLines = board.lines.filter { it.isPlaceable(turn) }
 
-        fun process(onPlace: (hand: List<Troop>, lines: List<Line>) -> Pair<Troop, Line>): BattleLine {
+        fun process(
+            onPlace: (hand: List<Troop>, lines: List<Line>) -> Pair<Troop, Line>,
+        ): BattleLine {
             val (troop, line) = onPlace(hand, validLines)
             check(hand.contains(troop) && validLines.contains(line))
 
@@ -33,31 +32,21 @@ sealed interface Phase : BattleLine {
         }
     }
 
-    data class Flag(
-        override val board: Board,
-        override val turn: Player,
-    ) : Phase {
+    data class Flag(override val board: Board, override val turn: Player) : Phase {
         fun process(): BattleLine = Draw(
             board = board.flag(turn),
             turn = turn,
         ).finishIfPossible()
     }
 
-    data class Draw(
-        override val board: Board,
-        override val turn: Player,
-    ) : Phase {
+    data class Draw(override val board: Board, override val turn: Player) : Phase {
         fun process(): BattleLine = Place(
             board = board.draw(turn = turn),
             turn = turn.switch(),
         ).finishIfPossible()
     }
 
-    data class Finish(
-        override val board: Board,
-        override val turn: Player,
-        val winner: Player,
-    ) : Phase
+    data class Finish(override val board: Board, override val turn: Player, val winner: Player) : Phase
 
     fun finishIfPossible(): Phase {
         if (this is Finish) return this

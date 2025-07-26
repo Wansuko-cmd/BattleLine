@@ -1,13 +1,8 @@
 package com.wsr.board
 
-data class Troop(
-    val position: Position,
-    val color: Color,
-)
+data class Troop(val position: Position, val color: Color)
 
-enum class Position(
-    val power: Int,
-) {
+enum class Position(val power: Int) {
     Elephants(10),
     Chariots(9),
     HeavyCavalry(8),
