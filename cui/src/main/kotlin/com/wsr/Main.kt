@@ -1,9 +1,14 @@
 package com.wsr
 
 fun main() {
-    var battleLine = BattleLine.create(onPlace = { hand, lines -> hand.random() to lines.random() })
-    while (battleLine.phase !is Phase.Finish) {
-        battleLine = battleLine.process()
+    var battleLine = BattleLine.create()
+    while (battleLine !is Phase.Finish) {
+        battleLine = when (battleLine) {
+            is Phase.Place -> battleLine.process { hand, lines -> hand.random() to lines.random() }
+            is Phase.Flag -> battleLine.process()
+            is Phase.Draw -> battleLine.process()
+            else -> battleLine
+        }
         println(battleLine.board.toDisplayString())
     }
 }
