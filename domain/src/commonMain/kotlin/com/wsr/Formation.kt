@@ -37,24 +37,14 @@ sealed class Formation(
             tail: Troop,
         ): Formation {
             val power = head.position.power + center.position.power + tail.position.power
-            val troops = Triple(head, center, tail)
+            val troops = listOf(head, center, tail)
             return when {
-                troops.isSameColor && troops.isConsecutivePosition -> Wedge(power = power)
-                troops.isSamePosition -> Phalanx(power = power)
-                troops.isSameColor -> BattalionOrder(power = power)
-                troops.isConsecutivePosition -> SkirmishLine(power = power)
+                troops.same { it.color } && troops.consecutive { it.position.power } -> Wedge(power = power)
+                troops.same { it.position } -> Phalanx(power = power)
+                troops.same { it.color } -> BattalionOrder(power = power)
+                troops.consecutive { it.position.power } -> SkirmishLine(power = power)
                 else -> Host(power = power)
             }
         }
     }
 }
-
-private val Triple<Troop, Troop, Troop>.isSameColor get() = first.color == second.color && second.color == third.color
-
-private val Triple<Troop, Troop, Troop>.isSamePosition get() = first.position == second.position && second.position == third.position
-
-private val Triple<Troop, Troop, Troop>.isConsecutivePosition: Boolean
-    get() {
-        val powers = this.toList().map { it.position.power }.sorted()
-        return powers[0] + 1 == powers[1] && powers[1] + 1 == powers[2]
-    }

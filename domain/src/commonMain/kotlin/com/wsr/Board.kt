@@ -16,18 +16,17 @@ data class Board private constructor(
 
     fun flag(turn: Player) = copy(lines = lines.map { it.claimFlag(turn) })
 
-    fun draw(turn: Player) = copy(deck = deck.drop(1))
-        .updateHand(turn) { hand -> hand + deck.take(1) }
+    fun draw(turn: Player) =
+        copy(deck = deck.drop(1))
+            .updateHand(turn) { hand -> hand + deck.take(1) }
 
-    private fun updateHand(turn: Player, block: (hand: List<Troop>) -> List<Troop>) = when (turn) {
+    private fun updateHand(
+        turn: Player,
+        block: (hand: List<Troop>) -> List<Troop>,
+    ) = when (turn) {
         Player.Left -> copy(leftHand = block(leftHand))
         Player.Right -> copy(rightHand = block(rightHand))
     }
-
-    private fun <T> List<T>.update(
-        index: Int,
-        block: (T) -> T,
-    ) = subList(0, index) + block(this[index]) + subList(index + 1, size)
 
     companion object {
         fun create(): Board {
