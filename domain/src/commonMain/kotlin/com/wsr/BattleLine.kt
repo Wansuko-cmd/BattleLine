@@ -58,12 +58,10 @@ sealed interface Phase : BattleLine {
 
         // 3つ連続で取得している
         val linesOwners = board.lines.map { it.owner }
-        for (i in 0..(linesOwners.lastIndex - 2)) {
-            val owners = linesOwners.subList(i, i + 3)
-            if (owners.all { it != null } && owners.same { it }) {
-                return Finish(board = board, turn = turn, winner = owners[0]!!)
-            }
-        }
+        linesOwners.asSequence()
+            .windowed(3)
+            .find { owners -> owners.all { it != null } && owners.same { it } }
+            ?.run { return Finish(board = board, turn = turn, winner = this[0]!!) }
 
         // 5つ以上取得している
         val (left, right) = linesOwners.filterNotNull().partition { it == Player.Left }
