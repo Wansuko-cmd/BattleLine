@@ -50,7 +50,8 @@ sealed interface Phase : BattleLine {
         ).finishIfPossible()
     }
 
-    data class Finish(override val board: Board, override val turn: Player, val winner: Player) : Phase
+    data class Finish(override val board: Board, override val turn: Player, val winner: Player) :
+        Phase
 
     fun finishIfPossible(): Phase {
         if (this is Finish) return this

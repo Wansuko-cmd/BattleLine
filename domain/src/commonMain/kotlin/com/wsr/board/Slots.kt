@@ -26,8 +26,7 @@ sealed interface InComplete : Slots {
 
     data class Two(val head: Troop, val tail: Troop) : InComplete {
         override fun place(troop: Troop) = Complete(head = head, center = tail, tail = troop)
-        override fun formatable(blind: List<Troop>): Formation =
-            blind.maxOf { place(it).formation }
+        override fun formatable(blind: List<Troop>): Formation = blind.maxOf { place(it).formation }
     }
 }
 

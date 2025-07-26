@@ -12,7 +12,7 @@ data class Board private constructor(
 ) {
     fun place(troop: Troop, line: Line, turn: Player) =
         copy(lines = lines.update(lines.indexOf(line)) { line -> line.place(troop, turn) })
-        .updateHand(turn) { hand -> hand.filterNot { it == troop } }
+            .updateHand(turn) { hand -> hand.filterNot { it == troop } }
 
     fun flag(turn: Player): Board {
         val blind = deck + leftHand + rightHand

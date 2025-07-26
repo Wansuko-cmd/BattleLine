@@ -1,8 +1,11 @@
 package com.wsr
 
-internal inline fun <T> List<T>.update(index: Int, block: (T) -> T) = this.toMutableList().apply { this[index] = block(this[index]) }
+internal inline fun <T> List<T>.update(index: Int, block: (T) -> T) = this
+    .toMutableList()
+    .apply { this[index] = block(this[index]) }
 
-internal inline fun <T, R : Comparable<R>> List<T>.maxOfIndexed(selector: (Int, T) -> R) = mapIndexed(selector).max()
+internal inline fun <T, R : Comparable<R>> List<T>.maxOfIndexed(selector: (Int, T) -> R) =
+    mapIndexed(selector).max()
 
 internal inline fun <T, U> List<T>.same(transform: (T) -> U): Boolean {
     val first = firstOrNull()?.let(transform) ?: return true

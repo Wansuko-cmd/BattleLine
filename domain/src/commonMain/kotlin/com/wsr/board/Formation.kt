@@ -24,7 +24,10 @@ sealed class Formation(val level: Int, open val power: Int) : Comparable<Formati
             val power = head.position.power + center.position.power + tail.position.power
             val troops = listOf(head, center, tail)
             return when {
-                troops.same { it.color } && troops.consecutive { it.position.power } -> Wedge(power = power)
+                troops.same {
+                    it.color
+                } &&
+                    troops.consecutive { it.position.power } -> Wedge(power = power)
                 troops.same { it.position } -> Phalanx(power = power)
                 troops.same { it.color } -> BattalionOrder(power = power)
                 troops.consecutive { it.position.power } -> SkirmishLine(power = power)
