@@ -27,11 +27,10 @@ sealed class Formation(
         override val power: Int,
     ) : Formation(level = 1, power = power)
 
-    override fun compareTo(other: Formation): Int =
-        when {
-            this.level == other.level -> this.power - other.power
-            else -> this.level - other.level
-        }
+    override fun compareTo(other: Formation): Int = when {
+        this.level == other.level -> this.power - other.power
+        else -> this.level - other.level
+    }
 
     companion object {
         fun create(

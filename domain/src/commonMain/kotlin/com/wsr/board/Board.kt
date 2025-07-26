@@ -19,9 +19,8 @@ data class Board private constructor(
 
     fun flag(turn: Player) = copy(lines = lines.map { it.claimFlag(turn) })
 
-    fun draw(turn: Player) =
-        copy(deck = deck.drop(1))
-            .updateHand(turn) { hand -> hand + deck.take(1) }
+    fun draw(turn: Player) = copy(deck = deck.drop(1))
+        .updateHand(turn) { hand -> hand + deck.take(1) }
 
     private fun updateHand(
         turn: Player,

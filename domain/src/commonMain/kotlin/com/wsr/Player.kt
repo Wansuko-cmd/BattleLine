@@ -5,9 +5,8 @@ enum class Player {
     Right,
     ;
 
-    fun switch() =
-        when (this) {
-            Left -> Right
-            Right -> Left
-        }
+    fun switch() = when (this) {
+        Left -> Right
+        Right -> Left
+    }
 }

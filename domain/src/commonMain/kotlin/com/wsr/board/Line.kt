@@ -11,10 +11,11 @@ data class Line private constructor(
 ) {
     fun isPlaceable() = owner == null && (isPlaceable(Player.Left) || isPlaceable(Player.Right))
 
-    fun isPlaceable(player: Player) = owner == null && when (player) {
-        Player.Left -> left is InComplete
-        Player.Right -> right is InComplete
-    }
+    fun isPlaceable(player: Player) = owner == null &&
+        when (player) {
+            Player.Left -> left is InComplete
+            Player.Right -> right is InComplete
+        }
 
     fun place(
         troop: Troop,
@@ -33,27 +34,25 @@ data class Line private constructor(
             }
     }
 
-    fun claimFlag(player: Player) =
-        when {
-            owner != null -> this
-            left is Complete && right is Complete ->
-                when {
-                    left.formation > right.formation -> copy(owner = Player.Left)
-                    left.formation < right.formation -> copy(owner = Player.Right)
-                    // 先にカードを置き切った方が取得できる
-                    else -> copy(owner = player.switch())
-                }
+    fun claimFlag(player: Player) = when {
+        owner != null -> this
+        left is Complete && right is Complete ->
+            when {
+                left.formation > right.formation -> copy(owner = Player.Left)
+                left.formation < right.formation -> copy(owner = Player.Right)
+                // 先にカードを置き切った方が取得できる
+                else -> copy(owner = player.switch())
+            }
 
-            else -> this
-        }
+        else -> this
+    }
 
     companion object {
-        fun create(index: Int) =
-            Line(
-                index = index.toString(),
-                left = InComplete.None,
-                right = InComplete.None,
-                owner = null,
-            )
+        fun create(index: Int) = Line(
+            index = index.toString(),
+            left = InComplete.None,
+            right = InComplete.None,
+            owner = null,
+        )
     }
 }

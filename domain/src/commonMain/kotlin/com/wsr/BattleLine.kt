@@ -9,11 +9,10 @@ sealed interface BattleLine {
     val turn: Player
 
     companion object {
-        fun create(): BattleLine =
-            Phase.Place(
-                board = Board.create(),
-                turn = Player.Left,
-            )
+        fun create(): BattleLine = Phase.Place(
+            board = Board.create(),
+            turn = Player.Left,
+        )
     }
 }
 
@@ -38,22 +37,20 @@ sealed interface Phase : BattleLine {
         override val board: Board,
         override val turn: Player,
     ) : Phase {
-        fun process(): BattleLine =
-            Draw(
-                board = board.flag(turn),
-                turn = turn,
-            ).finishIfPossible()
+        fun process(): BattleLine = Draw(
+            board = board.flag(turn),
+            turn = turn,
+        ).finishIfPossible()
     }
 
     data class Draw(
         override val board: Board,
         override val turn: Player,
     ) : Phase {
-        fun process(): BattleLine =
-            Place(
-                board = board.draw(turn = turn),
-                turn = turn.switch(),
-            ).finishIfPossible()
+        fun process(): BattleLine = Place(
+            board = board.draw(turn = turn),
+            turn = turn.switch(),
+        ).finishIfPossible()
     }
 
     data class Finish(
@@ -61,10 +58,9 @@ sealed interface Phase : BattleLine {
         override val turn: Player,
     ) : Phase
 
-    fun finishIfPossible(): Phase =
-        when {
-            this is Finish -> this
-            board.lines.none { line -> line.isPlaceable() } -> Finish(board = board, turn = turn)
-            else -> this
-        }
+    fun finishIfPossible(): Phase = when {
+        this is Finish -> this
+        board.lines.none { line -> line.isPlaceable() } -> Finish(board = board, turn = turn)
+        else -> this
+    }
 }
