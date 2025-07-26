@@ -1,5 +1,7 @@
 package com.wsr.board
 
+import com.wsr.maxOfIndexed
+
 sealed interface Slots
 
 sealed interface InComplete : Slots {
@@ -8,26 +10,24 @@ sealed interface InComplete : Slots {
 
     data object None : InComplete {
         override fun place(troop: Troop) = One(center = troop)
-        override fun formatable(blind: List<Troop>): Formation = blind.mapIndexed { index, troop ->
-            place(troop).formatable(blind.drop(index))
-        }
-            .max()
+        override fun formatable(blind: List<Troop>): Formation =
+            blind.maxOfIndexed { index, troop ->
+                place(troop).formatable(blind.drop(index))
+            }
     }
 
     data class One(val center: Troop) : InComplete {
         override fun place(troop: Troop) = Two(head = center, tail = troop)
-        override fun formatable(blind: List<Troop>): Formation = blind.mapIndexed { index, troop ->
-            place(troop).formatable(blind.drop(index))
-        }
-            .max()
+        override fun formatable(blind: List<Troop>): Formation =
+            blind.maxOfIndexed { index, troop ->
+                place(troop).formatable(blind.drop(index))
+            }
     }
 
     data class Two(val head: Troop, val tail: Troop) : InComplete {
         override fun place(troop: Troop) = Complete(head = head, center = tail, tail = troop)
-        override fun formatable(blind: List<Troop>): Formation = blind
-            .map { place(it) }
-            .maxBy { it.formation }
-            .formation
+        override fun formatable(blind: List<Troop>): Formation =
+            blind.maxOf { place(it).formation }
     }
 }
 
