@@ -5,7 +5,9 @@ data class Troop(
     val color: Color,
 )
 
-enum class Position(val power: Int) {
+enum class Position(
+    val power: Int,
+) {
     Elephants(10),
     Chariots(9),
     HeavyCavalry(8),
@@ -15,7 +17,7 @@ enum class Position(val power: Int) {
     Hoplites(4),
     Javalineers(3),
     Peltasts(2),
-    Skirmishers(1);
+    Skirmishers(1),
 }
 
 enum class Color {
@@ -24,5 +26,5 @@ enum class Color {
     Green,
     Blue,
     Orange,
-    Purple;
+    Purple,
 }
