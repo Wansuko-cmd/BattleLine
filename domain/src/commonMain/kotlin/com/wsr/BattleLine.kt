@@ -56,11 +56,28 @@ sealed interface Phase : BattleLine {
     data class Finish(
         override val board: Board,
         override val turn: Player,
+        val winner: Player,
     ) : Phase
 
-    fun finishIfPossible(): Phase = when {
-        this is Finish -> this
-        board.lines.none { line -> line.isPlaceable() } -> Finish(board = board, turn = turn)
-        else -> this
+    fun finishIfPossible(): Phase {
+        if (this is Finish) return this
+
+        // 3つ連続で取得している
+        val linesOwners = board.lines.map { it.owner }
+        for (i in 0..(linesOwners.lastIndex - 2)) {
+            val owners = linesOwners.subList(i, i + 3)
+            if (owners.all { it != null } && owners.same { it }) {
+                return Finish(board = board, turn = turn, winner = owners[0]!!)
+            }
+        }
+
+        // 5つ以上取得している
+        val (left, right) = linesOwners.filterNotNull().partition { it == Player.Left }
+        when {
+            left.size >= 5 -> return Finish(board = board, turn = turn, winner = Player.Left)
+            right.size >= 5 -> return Finish(board = board, turn = turn, winner = Player.Right)
+        }
+
+        return this
     }
 }

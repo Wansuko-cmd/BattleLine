@@ -17,6 +17,8 @@ fun main() {
                 Player.Right -> battleLine.processByCPU()
             }
     }
+    println(battleLine.board.toDisplayString())
+    println("Winner: ${battleLine.winner}")
 }
 
 private fun BattleLine.processByPlayer() = when (this) {
