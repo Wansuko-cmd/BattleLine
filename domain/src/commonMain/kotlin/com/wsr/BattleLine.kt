@@ -58,7 +58,7 @@ sealed interface Phase {
     }
 
     data class Flag(override val turn: Player) : Phase {
-        override fun process(board: Board) = board
+        override fun process(board: Board) = board.flag(turn)
     }
 
     data class Draw(override val turn: Player) : Phase {

@@ -12,21 +12,18 @@ data class Line private constructor(
     }
 
     fun place(troop: Troop, player: Player) = when (player) {
-        Player.Left -> placeLeft(troop)
-        Player.Right -> placeRight(troop)
+        Player.Left -> when (left) {
+            is InComplete -> copy(left = left.place(troop))
+            is Complete -> this
+        }
+
+        Player.Right -> when (right) {
+            is InComplete -> copy(right = right.place(troop))
+            is Complete -> this
+        }
     }
 
-    private fun placeLeft(troop: Troop) = when (left) {
-        is InComplete -> copy(left = left.place(troop)).claimFlag(Player.Left)
-        is Complete -> this
-    }
-
-    private fun placeRight(troop: Troop) = when (right) {
-        is InComplete -> copy(right = right.place(troop)).claimFlag(Player.Right)
-        is Complete -> this
-    }
-
-    private fun claimFlag(player: Player) = when {
+    fun claimFlag(player: Player) = when {
         owner != null -> this
         left is Complete && right is Complete -> when {
             left.formation > right.formation -> copy(owner = Player.Left)

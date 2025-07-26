@@ -11,6 +11,8 @@ data class Board private constructor(
         hands = hands.update(turn) { hand -> hand.filterNot { it == troop } },
     )
 
+    fun flag(turn: Player) = copy(lines = lines.map { it.claimFlag(turn) })
+
     fun draw(turn: Player) = copy(
         deck = deck.drop(1),
         hands = hands.update(key = turn) { hand -> hand + deck.take(1) },
