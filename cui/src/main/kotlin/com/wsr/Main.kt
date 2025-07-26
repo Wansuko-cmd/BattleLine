@@ -3,15 +3,54 @@ package com.wsr
 fun main() {
     var battleLine = BattleLine.create()
     while (battleLine !is Phase.Finish) {
-        battleLine =
-            when (battleLine) {
-                is Phase.Place -> battleLine.process { hand, lines -> hand.random() to lines.random() }
+        battleLine = when (battleLine.turn) {
+            Player.Left -> when (battleLine) {
+                is Phase.Place -> battleLine.process { hand, lines -> readHand(hand, lines) }
                 is Phase.Flag -> battleLine.process()
                 is Phase.Draw -> battleLine.process()
                 else -> battleLine
             }
-        println(battleLine.board.toDisplayString())
+
+            Player.Right -> when (battleLine) {
+                is Phase.Place -> battleLine
+                    .process { hand, lines -> hand.random() to lines.random() }
+                    .also { println(it.board.toDisplayString()) }
+
+                is Phase.Flag -> battleLine.process()
+                is Phase.Draw -> battleLine.process()
+                else -> battleLine
+            }
+        }
     }
+}
+
+private fun readHand(hand: List<Troop>, lines: List<Line>): Pair<Troop, Line> {
+    println(
+        "置ける場所:\n${
+            lines.mapIndexed { index, line -> "$index: ${line.toDisplayString()}" }
+                .joinToString("\n")
+        }",
+    )
+    println(
+        "手札: ${
+            hand.mapIndexed { index, troop -> "$index:${troop.toDisplayString()}" }
+                .joinToString(prefix = "[", postfix = "]", separator = "], [")
+        }",
+    )
+
+    var lineIndex: Int
+    var handIndex: Int
+    while (true) {
+        print("置く場所(数値): ")
+        lineIndex = readLine()?.toIntOrNull() ?: continue
+        if (lineIndex in lines.indices) break
+    }
+    while (true) {
+        print("使う手札(数値): ")
+        handIndex = readLine()?.toIntOrNull() ?: continue
+        if (handIndex in hand.indices) break
+    }
+    return hand[handIndex] to lines[lineIndex]
 }
 
 private fun Board.toDisplayString() =
