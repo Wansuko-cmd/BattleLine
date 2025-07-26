@@ -5,28 +5,31 @@ fun main() {
     while (battleLine !is Phase.Finish) {
         battleLine =
             when (battleLine.turn) {
-                Player.Left ->
-                    when (battleLine) {
-                        is Phase.Place -> battleLine.process { hand, lines -> readHand(hand, lines) }
-                        is Phase.Flag -> battleLine.process()
-                        is Phase.Draw -> battleLine.process()
-                        else -> battleLine
-                    }
-
-                Player.Right ->
-                    when (battleLine) {
-                        is Phase.Place ->
-                            battleLine
-                                .process { hand, lines -> hand.random() to lines.random() }
-                                .also { println(it.board.toDisplayString()) }
-
-                        is Phase.Flag -> battleLine.process()
-                        is Phase.Draw -> battleLine.process()
-                        else -> battleLine
-                    }
+                Player.Left -> battleLine.processByCPU()
+                Player.Right -> battleLine.processByCPU()
             }
     }
 }
+
+private fun BattleLine.processByPlayer() =
+    when (this) {
+        is Phase.Place -> this.process { hand, lines -> readHand(hand, lines) }
+        is Phase.Flag -> this.process()
+        is Phase.Draw -> this.process()
+        is Phase.Finish -> this
+    }
+
+private fun BattleLine.processByCPU() =
+    when (this) {
+        is Phase.Place ->
+            this
+                .process { hand, lines -> hand.random() to lines.random() }
+                .also { println(it.board.toDisplayString()) }
+
+        is Phase.Flag -> this.process()
+        is Phase.Draw -> this.process()
+        is Phase.Finish -> this
+    }
 
 private fun readHand(
     hand: List<Troop>,
