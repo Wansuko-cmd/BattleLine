@@ -9,13 +9,12 @@ data class Line private constructor(
     val right: Slots,
     val owner: Player?,
 ) {
-    fun isPlaceable() = isPlaceable(Player.Left) || isPlaceable(Player.Right)
+    fun isPlaceable() = owner == null && (isPlaceable(Player.Left) || isPlaceable(Player.Right))
 
-    fun isPlaceable(player: Player) =
-        when (player) {
-            Player.Left -> left is InComplete
-            Player.Right -> right is InComplete
-        }
+    fun isPlaceable(player: Player) = owner == null && when (player) {
+        Player.Left -> left is InComplete
+        Player.Right -> right is InComplete
+    }
 
     fun place(
         troop: Troop,
