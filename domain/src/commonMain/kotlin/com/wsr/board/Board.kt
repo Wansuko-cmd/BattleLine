@@ -1,4 +1,7 @@
-package com.wsr
+package com.wsr.board
+
+import com.wsr.Player
+import com.wsr.update
 
 @ConsistentCopyVisibility
 data class Board private constructor(

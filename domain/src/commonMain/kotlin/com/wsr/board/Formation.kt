@@ -1,4 +1,7 @@
-package com.wsr
+package com.wsr.board
+
+import com.wsr.consecutive
+import com.wsr.same
 
 sealed class Formation(
     val level: Int,

@@ -1,5 +1,13 @@
 package com.wsr
 
+import com.wsr.board.Board
+import com.wsr.board.Color
+import com.wsr.board.Complete
+import com.wsr.board.InComplete
+import com.wsr.board.Line
+import com.wsr.board.Slots
+import com.wsr.board.Troop
+
 fun main() {
     var battleLine = BattleLine.create()
     while (battleLine !is Phase.Finish) {

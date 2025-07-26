@@ -1,4 +1,4 @@
-package com.wsr
+package com.wsr.board
 
 sealed interface Slots
 

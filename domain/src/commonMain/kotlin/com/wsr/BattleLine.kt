@@ -1,5 +1,9 @@
 package com.wsr
 
+import com.wsr.board.Board
+import com.wsr.board.Line
+import com.wsr.board.Troop
+
 sealed interface BattleLine {
     val board: Board
     val turn: Player
