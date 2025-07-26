@@ -3,28 +3,35 @@ package com.wsr
 fun main() {
     var battleLine = BattleLine.create()
     while (battleLine !is Phase.Finish) {
-        battleLine = when (battleLine.turn) {
-            Player.Left -> when (battleLine) {
-                is Phase.Place -> battleLine.process { hand, lines -> readHand(hand, lines) }
-                is Phase.Flag -> battleLine.process()
-                is Phase.Draw -> battleLine.process()
-                else -> battleLine
-            }
+        battleLine =
+            when (battleLine.turn) {
+                Player.Left ->
+                    when (battleLine) {
+                        is Phase.Place -> battleLine.process { hand, lines -> readHand(hand, lines) }
+                        is Phase.Flag -> battleLine.process()
+                        is Phase.Draw -> battleLine.process()
+                        else -> battleLine
+                    }
 
-            Player.Right -> when (battleLine) {
-                is Phase.Place -> battleLine
-                    .process { hand, lines -> hand.random() to lines.random() }
-                    .also { println(it.board.toDisplayString()) }
+                Player.Right ->
+                    when (battleLine) {
+                        is Phase.Place ->
+                            battleLine
+                                .process { hand, lines -> hand.random() to lines.random() }
+                                .also { println(it.board.toDisplayString()) }
 
-                is Phase.Flag -> battleLine.process()
-                is Phase.Draw -> battleLine.process()
-                else -> battleLine
+                        is Phase.Flag -> battleLine.process()
+                        is Phase.Draw -> battleLine.process()
+                        else -> battleLine
+                    }
             }
-        }
     }
 }
 
-private fun readHand(hand: List<Troop>, lines: List<Line>): Pair<Troop, Line> {
+private fun readHand(
+    hand: List<Troop>,
+    lines: List<Line>,
+): Pair<Troop, Line> {
     println(
         "置ける場所:\n${
             lines.mapIndexed { index, line -> "$index: ${line.toDisplayString()}" }
