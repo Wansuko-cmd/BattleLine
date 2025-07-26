@@ -32,32 +32,20 @@ data class Board private constructor(
 
     companion object {
         fun create(): Board {
-            val lines = List(9) { index -> Line.create(index) }
-            val deck =
-                Position.entries.flatMap { position ->
-                    Color.entries.map { color ->
-                        Troop(position = position, color = color)
-                    }
+            val deck = Position.entries.flatMap { position ->
+                Color.entries.map { color ->
+                    Troop(position = position, color = color)
                 }
-            return Board(
-                lines = lines,
+            }
+            val board = Board(
+                lines = List(9) { index -> Line.create(index) },
                 deck = deck.shuffled(),
                 leftHand = emptyList(),
                 rightHand = emptyList(),
-            ).draw(Player.Left)
-                .draw(Player.Left)
-                .draw(Player.Left)
-                .draw(Player.Left)
-                .draw(Player.Left)
-                .draw(Player.Left)
-                .draw(Player.Left)
-                .draw(Player.Right)
-                .draw(Player.Right)
-                .draw(Player.Right)
-                .draw(Player.Right)
-                .draw(Player.Right)
-                .draw(Player.Right)
-                .draw(Player.Right)
+            )
+            return (0..7).fold(board) { acc, _ ->
+                acc.draw(Player.Left).draw(Player.Right)
+            }
         }
     }
 }
