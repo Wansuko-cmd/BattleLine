@@ -41,11 +41,8 @@ data class Line private constructor(
                 when {
                     left.formation > right.formation -> copy(owner = Player.Left)
                     left.formation < right.formation -> copy(owner = Player.Right)
-                    else ->
-                        when (player) {
-                            Player.Left -> copy(owner = Player.Right)
-                            Player.Right -> copy(owner = Player.Left)
-                        }
+                    // 先にカードを置き切った方が取得できる
+                    else -> copy(owner = player.switch())
                 }
 
             else -> this
