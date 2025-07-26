@@ -31,7 +31,7 @@ data class Board private constructor(
 
     companion object {
         fun create(): Board {
-            val lines = List(9) { Line.create() }
+            val lines = List(9) { index -> Line.create(index) }
             val deck =
                 Position.entries.flatMap { position ->
                     Color.entries.map { color ->

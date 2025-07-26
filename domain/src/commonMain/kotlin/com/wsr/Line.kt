@@ -1,16 +1,11 @@
 package com.wsr
 
-import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
-
 @ConsistentCopyVisibility
-data class Line
-    @OptIn(ExperimentalUuidApi::class)
-    private constructor(
-        private val id: String = Uuid.random().toString(),
-        val left: Slots,
-        val right: Slots,
-        val owner: Player?,
+data class Line private constructor(
+    private val index: String,
+    val left: Slots,
+    val right: Slots,
+    val owner: Player?,
     ) {
         fun isPlaceable() = isPlaceable(Player.Left) || isPlaceable(Player.Right)
 
@@ -55,6 +50,11 @@ data class Line
             }
 
         companion object {
-            fun create() = Line(left = InComplete.None, right = InComplete.None, owner = null)
+            fun create(index: Int) = Line(
+                index = index.toString(),
+                left = InComplete.None,
+                right = InComplete.None,
+                owner = null,
+            )
         }
     }
