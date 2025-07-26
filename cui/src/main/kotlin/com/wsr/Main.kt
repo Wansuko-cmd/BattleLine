@@ -17,10 +17,8 @@ fun main() {
                     when (battleLine) {
                         is Phase.Place ->
                             battleLine
-                                .process { hand, lines ->
-                                    val line = lines.filter { it.isPlaceable() }.random()
-                                    (0..hand.lastIndex).random() to lines.indexOf(line)
-                                }.also { println(it.board.toDisplayString()) }
+                                .process { hand, lines -> hand.random() to lines.random() }
+                                .also { println(it.board.toDisplayString()) }
 
                         is Phase.Flag -> battleLine.process()
                         is Phase.Draw -> battleLine.process()
@@ -33,7 +31,7 @@ fun main() {
 private fun readHand(
     hand: List<Troop>,
     lines: List<Line>,
-): Pair<Int, Int> {
+): Pair<Troop, Line> {
     println(
         "置ける場所:\n${
             lines.mapIndexed { index, line -> "$index: ${line.toDisplayString()}" }
@@ -59,7 +57,7 @@ private fun readHand(
         handIndex = readLine()?.toIntOrNull() ?: continue
         if (handIndex in hand.indices) break
     }
-    return handIndex to lineIndex
+    return hand[handIndex] to lines[lineIndex]
 }
 
 private fun Board.toDisplayString() =
