@@ -19,8 +19,9 @@ sealed interface Phase : BattleLine {
         override val turn: Player,
     ) : Phase {
         fun process(onPlace: (hand: List<Troop>, lines: List<Line>) -> Pair<Troop, Line>): BattleLine {
+            val hands = if (turn == Player.Left) board.leftHand else board.rightHand
             val validLine = board.lines.filter { it.isPlaceable(turn) }
-            val (troop, line) = onPlace(board.hands[turn]!!, validLine)
+            val (troop, line) = onPlace(hands, validLine)
             val board = board.place(troop = troop, line = line, turn = turn)
             return Flag(board, turn).finishIfPossible()
         }

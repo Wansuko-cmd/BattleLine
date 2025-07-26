@@ -4,38 +4,30 @@ package com.wsr
 data class Board private constructor(
     val lines: List<Line>,
     val deck: List<Troop>,
-    val hands: Map<Player, List<Troop>> = mapOf(),
+    val leftHand: List<Troop>,
+    val rightHand: List<Troop>,
 ) {
     fun place(
         troop: Troop,
         line: Line,
         turn: Player,
-    ) = copy(
-        lines = lines.update(lines.indexOf(line)) { line -> line.place(troop, turn) },
-        hands = hands.update(turn) { hand -> hand.filterNot { it == troop } },
-    )
+    ) = copy(lines = lines.update(lines.indexOf(line)) { line -> line.place(troop, turn) })
+        .updateHand(turn) { hand -> hand.filterNot { it == troop } }
 
     fun flag(turn: Player) = copy(lines = lines.map { it.claimFlag(turn) })
 
-    fun draw(turn: Player) =
-        copy(
-            deck = deck.drop(1),
-            hands = hands.update(key = turn) { hand -> hand + deck.take(1) },
-        )
+    fun draw(turn: Player) = copy(deck = deck.drop(1))
+        .updateHand(turn) { hand -> hand + deck.take(1) }
+
+    private fun updateHand(turn: Player, block: (hand: List<Troop>) -> List<Troop>) = when (turn) {
+        Player.Left -> copy(leftHand = block(leftHand))
+        Player.Right -> copy(rightHand = block(rightHand))
+    }
 
     private fun <T> List<T>.update(
         index: Int,
         block: (T) -> T,
     ) = subList(0, index) + block(this[index]) + subList(index + 1, size)
-
-    private fun <T, U> Map<T, U>.update(
-        key: T,
-        block: (U) -> U,
-    ): Map<T, U> {
-        val map = this.toMutableMap()
-        map[key] = map[key]?.let { block(it) } ?: return this
-        return map.toMap()
-    }
 
     companion object {
         fun create(): Board {
@@ -49,7 +41,8 @@ data class Board private constructor(
             return Board(
                 lines = lines,
                 deck = deck.shuffled(),
-                hands = mapOf(Player.Left to emptyList(), Player.Right to emptyList()),
+                leftHand = emptyList(),
+                rightHand = emptyList(),
             ).draw(Player.Left)
                 .draw(Player.Left)
                 .draw(Player.Left)

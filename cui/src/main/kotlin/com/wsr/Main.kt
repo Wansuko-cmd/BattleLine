@@ -69,8 +69,8 @@ private fun Board.toDisplayString() =
         appendLine(lines.joinToString("\n") { line -> "|${line.toDisplayString()}|" })
         appendLine("------------------------------")
         appendLine("Deck(${deck.size}): ${deck.joinToString { it.toDisplayString() }}")
-        appendLine("Left(${hands[Player.Left]?.size}): ${hands[Player.Left]?.joinToString { it.toDisplayString() }}")
-        appendLine("Right(${hands[Player.Right]?.size}): ${hands[Player.Right]?.joinToString { it.toDisplayString() }}")
+        appendLine("Left(${leftHand.size}): ${leftHand.joinToString { it.toDisplayString() }}")
+        appendLine("Right(${rightHand.size}): ${rightHand.joinToString { it.toDisplayString() }}")
     }
 
 private fun Line.toDisplayString() =
