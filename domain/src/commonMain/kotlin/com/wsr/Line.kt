@@ -1,7 +1,12 @@
 package com.wsr
 
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
+
 @ConsistentCopyVisibility
-data class Line private constructor(
+data class Line @OptIn(ExperimentalUuidApi::class)
+private constructor(
+    private val id: String = Uuid.random().toString(),
     val left: Slots,
     val right: Slots,
     val owner: Player?,
