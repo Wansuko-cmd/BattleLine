@@ -24,10 +24,14 @@ sealed interface Phase : BattleLine {
         fun process(
             onPlace: (hand: List<Troop>, lines: List<Line>) -> Pair<Troop, Line>,
         ): BattleLine {
-            val (troop, line) = onPlace(hand, validLines)
-            check(hand.contains(troop) && validLines.contains(line))
+            val board = if (validLines.isEmpty()) {
+                board
+            } else {
+                val (troop, line) = onPlace(hand, validLines)
+                check(hand.contains(troop) && validLines.contains(line))
+                board.place(troop = troop, line = line, turn = turn)
+            }
 
-            val board = board.place(troop = troop, line = line, turn = turn)
             return Flag(board = board, turn = turn).finishIfPossible()
         }
     }
