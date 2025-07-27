@@ -16,12 +16,12 @@ sealed interface BattleLine {
     }
 }
 
-sealed interface Phase : BattleLine {
+sealed class Phase : BattleLine {
     @ConsistentCopyVisibility
     data class Place internal constructor(
         override val board: Board,
         override val turn: Player,
-    ) : Phase {
+    ) : Phase() {
         fun process(
             onPlace: (lines: List<Line>, hand: List<Troop>) -> Pair<Line, Troop>,
         ): BattleLine = Flag(
@@ -34,7 +34,7 @@ sealed interface Phase : BattleLine {
     data class Flag internal constructor(
         override val board: Board,
         override val turn: Player,
-    ) : Phase {
+    ) : Phase() {
         fun process(): BattleLine = Draw(
             board = board.flag(turn),
             turn = turn,
@@ -45,7 +45,7 @@ sealed interface Phase : BattleLine {
     data class Draw internal constructor(
         override val board: Board,
         override val turn: Player,
-    ) : Phase {
+    ) : Phase() {
         fun process(): BattleLine = Place(
             board = board.draw(turn = turn),
             turn = turn.switch(),
@@ -57,9 +57,9 @@ sealed interface Phase : BattleLine {
         override val board: Board,
         override val turn: Player,
         val winner: Player,
-    ) : Phase
+    ) : Phase()
 
-    fun finishIfPossible(): Phase {
+    internal fun finishIfPossible(): Phase {
         if (this is Finish) return this
 
         // 3つ連続で取得している

@@ -3,7 +3,8 @@ package com.wsr.board
 import com.wsr.Player
 import com.wsr.update
 
-data class Board(
+@ConsistentCopyVisibility
+data class Board private constructor(
     val lines: List<Line>,
     private val deck: List<Troop>,
     private val leftHand: List<Troop>,
@@ -39,14 +40,9 @@ data class Board(
 
     companion object {
         internal fun create(): Board {
-            val deck = Position.entries.flatMap { position ->
-                Color.entries.map { color ->
-                    Troop(position = position, color = color)
-                }
-            }
             val board = Board(
                 lines = List(9) { index -> Line.create(index) },
-                deck = deck.shuffled(),
+                deck = Troop.createDeck().shuffled(),
                 leftHand = emptyList(),
                 rightHand = emptyList(),
             )

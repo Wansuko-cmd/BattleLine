@@ -1,7 +1,15 @@
 package com.wsr.board
 
 @ConsistentCopyVisibility
-data class Troop internal constructor(val position: Position, val color: Color)
+data class Troop private constructor(val position: Position, val color: Color) {
+    companion object {
+        internal fun createDeck() = Position.entries.flatMap { position ->
+            Color.entries.map { color ->
+                Troop(position = position, color = color)
+            }
+        }
+    }
+}
 
 enum class Position(val power: Int) {
     Elephants(10),
