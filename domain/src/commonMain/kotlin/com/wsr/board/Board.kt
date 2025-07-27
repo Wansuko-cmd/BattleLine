@@ -6,10 +6,13 @@ import com.wsr.update
 @ConsistentCopyVisibility
 data class Board private constructor(
     val lines: List<Line>,
-    val deck: List<Troop>,
-    val leftHand: List<Troop>,
-    val rightHand: List<Troop>,
+    private val deck: List<Troop>,
+    private val leftHand: List<Troop>,
+    private val rightHand: List<Troop>,
 ) {
+    // 場に見えていない部隊
+    val blind by lazy { (deck + leftHand + rightHand).shuffled() }
+
     fun place(
         turn: Player,
         onPlace: (hand: List<Troop>, lines: List<Line>) -> Pair<Troop, Line>,
@@ -26,10 +29,7 @@ data class Board private constructor(
             .updateHand(turn) { hand -> hand.filterNot { it == troop } }
     }
 
-    fun flag(turn: Player): Board {
-        val blind = deck + leftHand + rightHand
-        return copy(lines = lines.map { it.claimFlag(turn, blind) })
-    }
+    fun flag(turn: Player): Board = copy(lines = lines.map { it.claimFlag(turn, blind) })
 
     fun draw(turn: Player) = copy(deck = deck.drop(1))
         .updateHand(turn) { hand -> hand + deck.take(1) }

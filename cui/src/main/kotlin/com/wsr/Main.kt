@@ -72,9 +72,7 @@ private fun Board.toDisplayString() = buildString {
     appendLine("------------------------------")
     appendLine(lines.joinToString("\n") { line -> "|${line.toDisplayString()}|" })
     appendLine("------------------------------")
-    appendLine("Deck(${deck.size}): ${deck.joinToString { it.toDisplayString() }}")
-    appendLine("Left(${leftHand.size}): ${leftHand.joinToString { it.toDisplayString() }}")
-    appendLine("Right(${rightHand.size}): ${rightHand.joinToString { it.toDisplayString() }}")
+    appendLine("場に見えていないカード(${blind.size}): ${ blind.joinToString { it.toDisplayString() } }")
 }
 
 private fun Line.toDisplayString() = buildString {
