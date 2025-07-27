@@ -1,4 +1,4 @@
-@file:Suppress("NonAsciiCharacters", "TestFunctionName")
+@file:Suppress("NonAsciiCharacters", "TestFunctionName", "RemoveRedundantBackticks")
 
 package com.wsr.e2e
 
@@ -17,7 +17,7 @@ class BattleLineMonkeyTest {
     }
 
     @Test
-    fun N回実行してエラーを投げないかどうか() {
+    fun `N回実行してエラーを投げないかどうか`() {
         val time = measureTimeMillis {
             (0..N).forEach { _ -> runBattleLine() }
         }
