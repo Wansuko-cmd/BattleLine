@@ -1,6 +1,7 @@
 package com.wsr.board
 
-data class Troop(val position: Position, val color: Color)
+@ConsistentCopyVisibility
+data class Troop internal constructor(val position: Position, val color: Color)
 
 enum class Position(val power: Int) {
     Elephants(10),

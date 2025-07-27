@@ -54,7 +54,7 @@ data class Line private constructor(
     }
 
     companion object {
-        fun create(index: Int) = Line(
+        internal fun create(index: Int) = Line(
             index = index.toString(),
             left = InComplete.None,
             right = InComplete.None,
