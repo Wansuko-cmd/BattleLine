@@ -18,10 +18,8 @@ sealed interface BattleLine {
 
 sealed class Phase : BattleLine {
     @ConsistentCopyVisibility
-    data class Place internal constructor(
-        override val board: Board,
-        override val turn: Player,
-    ) : Phase() {
+    data class Place internal constructor(override val board: Board, override val turn: Player) :
+        Phase() {
         fun process(
             onPlace: (lines: List<Line>, hand: List<Troop>) -> Pair<Line, Troop>,
         ): BattleLine = Flag(
@@ -31,10 +29,8 @@ sealed class Phase : BattleLine {
     }
 
     @ConsistentCopyVisibility
-    data class Flag internal constructor(
-        override val board: Board,
-        override val turn: Player,
-    ) : Phase() {
+    data class Flag internal constructor(override val board: Board, override val turn: Player) :
+        Phase() {
         fun process(): BattleLine = Draw(
             board = board.flag(turn),
             turn = turn,
@@ -42,10 +38,8 @@ sealed class Phase : BattleLine {
     }
 
     @ConsistentCopyVisibility
-    data class Draw internal constructor(
-        override val board: Board,
-        override val turn: Player,
-    ) : Phase() {
+    data class Draw internal constructor(override val board: Board, override val turn: Player) :
+        Phase() {
         fun process(): BattleLine = Place(
             board = board.draw(turn = turn),
             turn = turn.switch(),
