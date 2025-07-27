@@ -4,33 +4,33 @@ import com.wsr.BattleLine
 import com.wsr.Phase
 import com.wsr.Player
 import com.wsr.board.Complete
+import com.wsr.board.Formation
 import com.wsr.board.InComplete
+import com.wsr.board.Troop
 
 internal fun BattleLine.processByCPU() = when (this) {
     is Phase.Place -> this.process { lines, hand ->
-        val line = lines
-            .maxBy { line ->
+        val (line, hand) = lines
+            .map { line ->
                 val slots = if (turn == Player.Left) line.left else line.right
-                hand.maxOf { troop ->
-                    val blind = board.blind.filter { it != troop }
-                    when (slots) {
-                        is Complete -> throw IllegalStateException()
-                        is InComplete.Two -> slots.place(troop).formation
-                        is InComplete.One -> slots.place(troop).formatable(blind)
-                        is InComplete.None -> slots.place(troop).formatable(blind)
+                val calculateFormation: (Troop) -> Formation = when (slots) {
+                    is Complete -> throw IllegalStateException()
+                    is InComplete.Two -> { troop -> slots.place(troop).formation }
+                    is InComplete.One -> { troop ->
+                        val blind = board.blind.filter { it != troop }
+                        slots.place(troop).formatable(blind)
+                    }
+                    is InComplete.None -> { troop ->
+                        val blind = board.blind.filter { it != troop }
+                        slots.place(troop).formatable(blind)
                     }
                 }
+                val (hand, formation) = hand
+                    .map { troop -> troop to calculateFormation(troop) }
+                    .maxBy { (_, formation) -> formation }
+                Triple(line, hand, formation)
             }
-
-        val hand = hand.maxBy { troop ->
-            val slots = if (turn == Player.Left) line.left else line.right
-            when (slots) {
-                is Complete -> throw IllegalStateException()
-                is InComplete.Two -> slots.place(troop).formation
-                is InComplete.One -> slots.place(troop).formatable(board.blind)
-                is InComplete.None -> slots.place(troop).formatable(board.blind)
-            }
-        }
+            .maxBy { (_, _, formation) -> formation }
 
         line to hand
     }
