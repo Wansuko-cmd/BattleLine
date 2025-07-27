@@ -23,4 +23,4 @@ jobs:
           chmod 777 ${{ github.workspace }}/gradlew
       - name: テストを実行
         run: |
-          ${{ github.workspace }}/gradlew test
+          ${{ github.workspace }}/gradlew allTests

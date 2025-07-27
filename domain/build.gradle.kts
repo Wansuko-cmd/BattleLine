@@ -10,5 +10,9 @@ kotlin {
                 implementation(libs.kotlin.datetime)
             }
         }
+
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+        }
     }
 }
