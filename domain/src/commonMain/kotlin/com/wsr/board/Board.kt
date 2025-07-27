@@ -11,7 +11,7 @@ data class Board private constructor(
     private val rightHand: List<Troop>,
 ) {
     // 場に見えていない部隊
-    val blind by lazy { (deck + leftHand + rightHand).shuffled() }
+    val blind by lazy { (deck + leftHand + rightHand).sorted() }
 
     fun place(
         turn: Player,
@@ -34,8 +34,8 @@ data class Board private constructor(
         .updateHand(turn) { hand -> hand + deck.take(1) }
 
     private fun updateHand(turn: Player, block: (hand: List<Troop>) -> List<Troop>) = when (turn) {
-        Player.Left -> copy(leftHand = block(leftHand))
-        Player.Right -> copy(rightHand = block(rightHand))
+        Player.Left -> copy(leftHand = block(leftHand).sorted())
+        Player.Right -> copy(rightHand = block(rightHand).sorted())
     }
 
     companion object {
