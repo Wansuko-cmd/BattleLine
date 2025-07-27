@@ -10,9 +10,21 @@ data class Board private constructor(
     val leftHand: List<Troop>,
     val rightHand: List<Troop>,
 ) {
-    fun place(troop: Troop, line: Line, turn: Player) =
-        copy(lines = lines.update(lines.indexOf(line)) { line -> line.place(troop, turn) })
+    fun place(
+        turn: Player,
+        onPlace: (hand: List<Troop>, lines: List<Line>) -> Pair<Troop, Line>,
+    ): Board {
+        val hand = if (turn == Player.Left) leftHand else rightHand
+        val validLines = lines.filter { line -> line.isPlaceable(turn) }
+
+        if (validLines.isEmpty()) return this
+
+        val (troop, line) = onPlace(hand, validLines)
+        check(hand.contains(troop) && validLines.contains(line))
+
+        return copy(lines = lines.update(lines.indexOf(line)) { line -> line.place(troop, turn) })
             .updateHand(turn) { hand -> hand.filterNot { it == troop } }
+    }
 
     fun flag(turn: Player): Board {
         val blind = deck + leftHand + rightHand

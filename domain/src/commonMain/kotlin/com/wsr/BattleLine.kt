@@ -18,22 +18,12 @@ sealed interface BattleLine {
 
 sealed interface Phase : BattleLine {
     data class Place(override val board: Board, override val turn: Player) : Phase {
-        private val hand = if (turn == Player.Left) board.leftHand else board.rightHand
-        private val validLines = board.lines.filter { it.isPlaceable(turn) }
-
         fun process(
             onPlace: (hand: List<Troop>, lines: List<Line>) -> Pair<Troop, Line>,
-        ): BattleLine {
-            val board = if (validLines.isEmpty()) {
-                board
-            } else {
-                val (troop, line) = onPlace(hand, validLines)
-                check(hand.contains(troop) && validLines.contains(line))
-                board.place(troop = troop, line = line, turn = turn)
-            }
-
-            return Flag(board = board, turn = turn).finishIfPossible()
-        }
+        ): BattleLine = Flag(
+            board = board.place(turn = turn, onPlace = onPlace),
+            turn = turn,
+        ).finishIfPossible()
     }
 
     data class Flag(override val board: Board, override val turn: Player) : Phase {
