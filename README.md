@@ -13,13 +13,13 @@ var battleLine = BattleLine.create()
 while (battleLine !is Phase.Finish) {
     battleLine = when (battleLine.turn) {
         is Player.Left -> when (battleLine) {
-            is Place -> battleLine.process { hand, line -> readHand(hand) to readLine(line) }
+            is Place -> battleLine.process { line, hand -> readLine(line) to readHand(hand) }
             is Flag -> battleLine.process()
             is Draw -> battleLine.process()
             else -> battleLine
         }
         is Player.Right -> when (battleLine) {
-            is Place -> battleLine.process { hand, line -> thinkPlace(battleLine.board, hand) }
+            is Place -> battleLine.process { line, hand -> thinkPlace(battleLine.board, line, hand) }
             is Flag -> battleLine.process()
             is Draw -> battleLine.process()
             else -> battleLine

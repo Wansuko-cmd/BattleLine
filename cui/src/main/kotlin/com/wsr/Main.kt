@@ -31,7 +31,7 @@ private fun BattleLine.processByPlayer() = when (this) {
 private fun BattleLine.processByCPU() = when (this) {
     is Phase.Place ->
         this
-            .process { hand, lines -> hand.random() to lines.random() }
+            .process { lines, hand -> lines.random() to hand.random() }
             .also { println(it.board.toDisplayString()) }
 
     is Phase.Flag -> this.process()
@@ -39,7 +39,7 @@ private fun BattleLine.processByCPU() = when (this) {
     is Phase.Finish -> this
 }
 
-private fun readHand(hand: List<Troop>, lines: List<Line>): Pair<Troop, Line> {
+private fun readHand(lines: List<Line>, hand: List<Troop>): Pair<Line, Troop> {
     println(
         "置ける場所:\n${
             lines.mapIndexed { index, line -> "$index: ${line.toDisplayString()}" }
@@ -65,7 +65,7 @@ private fun readHand(hand: List<Troop>, lines: List<Line>): Pair<Troop, Line> {
         handIndex = readLine()?.toIntOrNull() ?: continue
         if (handIndex in hand.indices) break
     }
-    return hand[handIndex] to lines[lineIndex]
+    return lines[lineIndex] to hand[handIndex]
 }
 
 private fun Board.toDisplayString() = buildString {

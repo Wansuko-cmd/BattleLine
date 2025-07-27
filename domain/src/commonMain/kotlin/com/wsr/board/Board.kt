@@ -14,15 +14,14 @@ data class Board(
 
     fun place(
         turn: Player,
-        onPlace: (hand: List<Troop>, lines: List<Line>) -> Pair<Troop, Line>,
+        onPlace: (lines: List<Line>, hand: List<Troop>) -> Pair<Line, Troop>,
     ): Board {
-        val hand = if (turn == Player.Left) leftHand else rightHand
         val validLines = lines.filter { line -> line.isPlaceable(turn) }
-
         if (validLines.isEmpty()) return this
+        val hand = if (turn == Player.Left) leftHand else rightHand
 
-        val (troop, line) = onPlace(hand, validLines)
-        check(hand.contains(troop) && validLines.contains(line))
+        val (line, troop) = onPlace(validLines, hand)
+        check(validLines.contains(line) && hand.contains(troop))
 
         return copy(lines = lines.update(lines.indexOf(line)) { line -> line.place(troop, turn) })
             .updateHand(turn) { hand -> hand.filterNot { it == troop } }

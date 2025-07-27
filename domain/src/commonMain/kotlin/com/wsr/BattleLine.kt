@@ -23,7 +23,7 @@ sealed interface Phase : BattleLine {
         override val turn: Player,
     ) : Phase {
         fun process(
-            onPlace: (hand: List<Troop>, lines: List<Line>) -> Pair<Troop, Line>,
+            onPlace: (lines: List<Line>, hand: List<Troop>) -> Pair<Line, Troop>,
         ): BattleLine = Flag(
             board = board.place(turn = turn, onPlace = onPlace),
             turn = turn,
