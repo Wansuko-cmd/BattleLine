@@ -1,6 +1,7 @@
 package com.wsr
 
 import com.wsr.process.processByCPU
+import com.wsr.process.processByRandom
 
 fun main() {
     var battleLine = BattleLine.create()
@@ -8,7 +9,7 @@ fun main() {
         battleLine =
             when (battleLine.turn) {
                 Player.Left -> battleLine.processByCPU()
-                Player.Right -> battleLine.processByCPU()
+                Player.Right -> battleLine.processByRandom()
             }
                 .also { println(it.board.toDisplayString()) }
     }
