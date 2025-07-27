@@ -42,12 +42,12 @@ data class Line private constructor(
             }
 
         left is Complete && right is InComplete -> when {
-            left.formation > right.formatable(blind) -> copy(owner = Player.Left)
+            left.formation >= right.formatable(blind) -> copy(owner = Player.Left)
             else -> this
         }
 
         left is InComplete && right is Complete -> when {
-            left.formatable(blind) < right.formation -> copy(owner = Player.Right)
+            left.formatable(blind) <= right.formation -> copy(owner = Player.Right)
             else -> this
         }
         else -> this
