@@ -11,7 +11,7 @@ fun main() {
                 Player.Left -> battleLine.processByCPU()
                 Player.Right -> battleLine.processByRandom()
             }
-                .also { println(it.board.toDisplayString()) }
+        if (battleLine is Phase.Draw) println(battleLine.board.toDisplayString())
     }
     println(battleLine.board.toDisplayString())
     println("Winner: ${battleLine.winner}")
