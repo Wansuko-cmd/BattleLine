@@ -7,6 +7,10 @@ internal inline fun <T> List<T>.update(index: Int, block: (T) -> T) = this
 internal inline fun <T, R : Comparable<R>> List<T>.maxOfIndexed(selector: (Int, T) -> R) =
     mapIndexed(selector).max()
 
+internal fun <T> List<T>.dropAt(index: Int) = this
+    .toMutableList()
+    .apply { this.removeAt(index) }
+
 internal inline fun <T, U> List<T>.same(transform: (T) -> U): Boolean {
     val first = firstOrNull()?.let(transform) ?: return true
     for (item in this.drop(1)) {

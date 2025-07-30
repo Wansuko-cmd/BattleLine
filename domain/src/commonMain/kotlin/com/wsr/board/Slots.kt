@@ -1,5 +1,6 @@
 package com.wsr.board
 
+import com.wsr.dropAt
 import com.wsr.maxOfIndexed
 
 sealed interface Slots
@@ -12,7 +13,7 @@ sealed interface InComplete : Slots {
         override fun place(troop: Troop) = One(center = troop)
         override fun formatable(blind: List<Troop>): Formation =
             blind.maxOfIndexed { index, troop ->
-                place(troop).formatable(blind.drop(index))
+                place(troop).formatable(blind.dropAt(index))
             }
     }
 
@@ -20,7 +21,7 @@ sealed interface InComplete : Slots {
         override fun place(troop: Troop) = Two(head = center, tail = troop)
         override fun formatable(blind: List<Troop>): Formation =
             blind.maxOfIndexed { index, troop ->
-                place(troop).formatable(blind.drop(index))
+                place(troop).formatable(blind.dropAt(index))
             }
     }
 
