@@ -25,5 +25,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "BattleLine"
 
-include(":domain")
-include(":cui")
+include(":lib")
+include(":sample")

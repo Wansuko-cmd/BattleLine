@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    implementation(projects.domain)
+    implementation(projects.lib)
 
     implementation(libs.kotlin.coroutine)
     implementation(libs.kotlin.datetime)
