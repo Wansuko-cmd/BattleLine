@@ -59,28 +59,29 @@ private fun Line.percent(turn: Player, blind: List<Troop>): Double = when {
 private fun Slots.formatables(blind: List<Troop>): List<Formation> = when (this) {
     is Complete -> listOf(formation)
     is InComplete.Two -> blind.map { place(it).formation }
-    is InComplete.One -> blind
-        .flatMapIndexed { index, troop ->
-            val complete = place(troop)
-            blind.dropAt(index).map { complete.place(it) }
-        }
-        .distinctBy { (head, center, tail) -> setOf(head, center, tail) }
-        .map { it.formation }
-
-    is InComplete.None -> blind
-        .flatMapIndexed { index, troop ->
-            val two = place(troop)
-            val blind2 = blind.dropAt(index)
-            blind2.flatMapIndexed { i2, t2 ->
-                val complete = two.place(t2)
-                blind2.dropAt(i2).map { complete.place(it) }
+    is InComplete.One ->
+        blind
+            .flatMapIndexed { index, troop ->
+                val complete = place(troop)
+                blind.dropAt(index).map { complete.place(it) }
             }
-        }
-        .distinctBy { (head, center, tail) -> setOf(head, center, tail) }
-        .map { it.formation }
+            .distinctBy { (head, center, tail) -> setOf(head, center, tail) }
+            .map { it.formation }
+
+    is InComplete.None ->
+        blind
+            .flatMapIndexed { index, troop ->
+                val two = place(troop)
+                val blind2 = blind.dropAt(index)
+                blind2.flatMapIndexed { i2, t2 ->
+                    val complete = two.place(t2)
+                    blind2.dropAt(i2).map { complete.place(it) }
+                }
+            }
+            .distinctBy { (head, center, tail) -> setOf(head, center, tail) }
+            .map { it.formation }
 }
 
 private fun <T> List<T>.dropAt(index: Int) = this
     .toMutableList()
     .apply { this.removeAt(index) }
-

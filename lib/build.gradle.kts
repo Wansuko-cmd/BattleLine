@@ -16,3 +16,14 @@ kotlin {
         }
     }
 }
+
+publishing {
+    publications {
+        create<MavenPublication>("battle-line") {
+            groupId = libs.versions.lib.group.id.get()
+            artifactId = "battle-line"
+            version = libs.versions.lib.version.get()
+            from(components["kotlin"])
+        }
+    }
+}
