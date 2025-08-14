@@ -2,4 +2,4 @@ jdk:
   - openjdk17
 install:
   - chmod 777 ./gradlew
-  - ./gradlew lib:publishToMavenLocal
+  - ./gradlew core:publishToMavenLocal

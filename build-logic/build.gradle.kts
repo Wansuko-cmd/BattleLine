@@ -17,5 +17,9 @@ gradlePlugin {
             id = "com.wsr.multiplatform"
             implementationClass = "KotlinMultiPlatformPlugin"
         }
+        register("mavenPublish") {
+            id = "com.wsr.maven.publish"
+            implementationClass = "MavenPublishPlugin"
+        }
     }
 }

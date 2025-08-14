@@ -25,5 +25,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "BattleLine"
 
-include(":lib")
+include(":core")
 include(":sample")
