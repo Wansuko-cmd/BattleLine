@@ -20,7 +20,7 @@ class MavenPublishPlugin : Plugin<Project> {
 
             publishing {
                 publications {
-                    this.create<MavenPublication>(libs.getVersion("lib.name")) {
+                    create<MavenPublication>(libs.getVersion("lib.name")) {
                         groupId = libs.getVersion("lib.group.id")
                         artifactId = project.name
                         version = libs.getVersion("lib.version")
