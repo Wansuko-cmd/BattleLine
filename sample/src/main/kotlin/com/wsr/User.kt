@@ -1,10 +1,7 @@
-package com.wsr.process
+package com.wsr
 
-import com.wsr.BattleLine
-import com.wsr.Phase
 import com.wsr.board.Line
 import com.wsr.board.Troop
-import com.wsr.toDisplayString
 
 internal fun BattleLine.processByUser() = when (this) {
     is Phase.Place -> this.process { hand, lines -> readHand(hand, lines) }
