@@ -10,6 +10,7 @@ import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.get
+import org.gradle.kotlin.dsl.getByName
 
 class MavenPublishPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -20,11 +21,10 @@ class MavenPublishPlugin : Plugin<Project> {
 
             publishing {
                 publications {
-                    create<MavenPublication>(libs.getVersion("lib.name")) {
+                    getByName<MavenPublication>("kotlinMultiplatform") {
                         groupId = libs.getVersion("lib.group.id")
                         artifactId = project.name
                         version = libs.getVersion("lib.version")
-                        from(components["kotlin"])
                     }
                 }
             }
