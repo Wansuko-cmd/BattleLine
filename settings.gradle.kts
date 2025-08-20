@@ -26,4 +26,5 @@ dependencyResolutionManagement {
 rootProject.name = "BattleLine"
 
 include(":core")
+include(":cpu")
 include(":sample")
