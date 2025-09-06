@@ -2,8 +2,26 @@ package com.wsr.board
 
 import com.wsr.Player
 import com.wsr.update
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
+import kotlinx.serialization.modules.subclass
+
+val json = Json {
+    serializersModule = SerializersModule {
+        polymorphic(Slots::class) {
+            subclass(InComplete.None::class)
+            subclass(InComplete.One::class)
+            subclass(InComplete.Two::class)
+            subclass(Complete::class)
+        }
+    }
+}
 
 @ConsistentCopyVisibility
+@Serializable
 data class Board private constructor(
     val lines: List<Line>,
     private val deck: List<Troop>,
@@ -38,6 +56,8 @@ data class Board private constructor(
         Player.Right -> copy(rightHand = block(rightHand).sorted())
     }
 
+    fun toJson() = json.encodeToString(this)
+
     companion object {
         internal fun create(): Board {
             val board = Board(
@@ -50,5 +70,7 @@ data class Board private constructor(
                 acc.draw(Player.Left).draw(Player.Right)
             }
         }
+
+        fun fromJson(value: String): Board = json.decodeFromString(value)
     }
 }

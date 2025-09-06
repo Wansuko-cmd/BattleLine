@@ -1,8 +1,10 @@
 package com.wsr.board
 
 import com.wsr.Player
+import kotlinx.serialization.Serializable
 
 @ConsistentCopyVisibility
+@Serializable
 data class Line private constructor(
     private val index: String,
     val left: Slots,

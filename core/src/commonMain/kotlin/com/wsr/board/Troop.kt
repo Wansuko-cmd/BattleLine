@@ -1,6 +1,9 @@
 package com.wsr.board
 
+import kotlinx.serialization.Serializable
+
 @ConsistentCopyVisibility
+@Serializable
 data class Troop private constructor(val position: Position, val color: Color) : Comparable<Troop> {
     override fun compareTo(other: Troop): Int = when {
         this.position != other.position -> this.position.power - other.position.power

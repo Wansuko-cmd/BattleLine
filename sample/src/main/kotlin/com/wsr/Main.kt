@@ -16,7 +16,7 @@ fun main() {
     val datasets = createDatasets()
 
 //    generateNetwork2(rate = 0.005, seed = 0)
-//        .train2(3000, datasets)
+//        .train2(10, datasets)
 //        .test2()
 //        .save2()
 //    var battleLine = BattleLine.create()

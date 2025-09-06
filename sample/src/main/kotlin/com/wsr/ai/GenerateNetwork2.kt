@@ -44,9 +44,9 @@ fun generateNetwork2(
 
 fun Network<IOType.D2, IOType.D1>.train2(epoc: Int, dataset: List<Dataset>): Network<IOType.D2, IOType.D1> = apply {
     for (i in 0..epoc) {
-        if (i % 10 == 0) println("epoc: $i, ${expect(dataset[0].input)}")
+        if (i % 10 == 0) println("epoc: $i, ${expect(dataset[0].input.toIOTypeD2())}")
         dataset.shuffled().take(200).onEach { (input, label) ->
-            this.train(input = input, label = label)
+            this.train(input = input.toIOTypeD2(), label = label)
         }
     }
 

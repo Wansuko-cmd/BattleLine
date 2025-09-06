@@ -2,7 +2,9 @@ package com.wsr.board
 
 import com.wsr.consecutive
 import com.wsr.same
+import kotlinx.serialization.Serializable
 
+@Serializable
 sealed class Formation(val level: Int, open val power: Int) : Comparable<Formation> {
     @ConsistentCopyVisibility
     data class Wedge internal constructor(override val power: Int) :

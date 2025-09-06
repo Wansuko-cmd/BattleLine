@@ -1,6 +1,7 @@
 plugins {
     alias(buildLogic.plugins.kotlin.multiplatform)
     alias(buildLogic.plugins.maven.publish)
+    alias(libs.plugins.serialization)
 }
 
 kotlin {
@@ -9,6 +10,7 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.coroutine)
                 implementation(libs.kotlin.datetime)
+                implementation(libs.serialization)
             }
         }
 
