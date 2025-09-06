@@ -8,21 +8,18 @@ import com.wsr.board.Line
 import com.wsr.board.Slots
 import com.wsr.board.Troop
 
-fun Board.percent(turn: Player): List<Double> = lines.map { line -> line.percent(turn, blind) }
+fun Board.percent(): List<Double> = lines.map { line -> line.percent(blind) }
 
-private fun Line.percent(turn: Player, blind: List<Troop>): Double = when {
-    !isPlaceable() -> if (turn == owner) 1.0 else 0.0
-    left is InComplete.None && right is InComplete.None -> 0.5
+private fun Line.percent(blind: List<Troop>): Double = when {
+    !isPlaceable() -> if (owner == Player.Left) 1.0 else -1.0
+    left is InComplete.None && right is InComplete.None -> 0.0
     else -> {
         val lefts = left.formatables(blind)
         val rights = right.formatables(blind)
         val versus = lefts
             .flatMap { left -> rights.map { right -> left to right } }
             .filterNot { (left, right) -> left == right }
-        when (turn) {
-            Player.Left -> versus.count { (left, right) -> left > right } / versus.size.toDouble()
-            Player.Right -> versus.count { (left, right) -> left < right } / versus.size.toDouble()
-        }
+        versus.sumOf { (left, right) -> if (left > right) 1 else -1 } / versus.size.toDouble()
     }
 }
 
