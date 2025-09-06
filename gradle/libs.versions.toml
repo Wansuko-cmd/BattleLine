@@ -7,6 +7,7 @@ lib-version = "0.0.1-alpha02"
 kotlin = "2.2.0"
 coroutine = "1.10.2"
 datetime = "0.7.1-0.6.x-compat"
+serialization = "1.9.0"
 
 # Ktlint
 ktlint = "13.0.0"
@@ -15,6 +16,7 @@ ktlint = "13.0.0"
 # Kotlin
 kotlin-coroutine = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutine" }
 kotlin-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "datetime" }
+serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
 
 # Gradle
 gradle-kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -23,4 +25,5 @@ gradle-kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin",
 # Kotlin
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }

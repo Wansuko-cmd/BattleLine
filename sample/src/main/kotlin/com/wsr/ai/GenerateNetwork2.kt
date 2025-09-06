@@ -31,7 +31,7 @@ fun generateNetwork2(
         return Network.fromJson(FILE.readText())
     }
     val network = NetworkBuilder.inputD2(x = 6, y = 9, rate = rate, seed = seed)
-        .convD1(filter = 50, kernel = 4, padding = 3).maxPool(2).bias()
+//        .convD1(filter = 50, kernel = 4, padding = 3).maxPool(2).bias()
         .reshapeD1()
         .affine(500).bias().relu()
 //        .affine(50).bias().relu()
@@ -42,28 +42,35 @@ fun generateNetwork2(
     return network
 }
 
-fun Network<IOType.D2, IOType.D1>.train2(epoc: Int): Network<IOType.D2, IOType.D1> = apply {
+fun Network<IOType.D2, IOType.D1>.train2(epoc: Int, dataset: List<Dataset>): Network<IOType.D2, IOType.D1> = apply {
     for (i in 0..epoc) {
-        if (i % 10 == 0) println("epoc: $i")
-        var battleLine = BattleLine.create()
-        while (true) {
-            val next = battleLine.processByRandom()
-            if (next is Phase.Finish) {
-                val label = if (next.winner == Player.Left) listOf(1.0, 0.0) else listOf(0.0, 1.0)
-                this.train(
-                    input = battleLine.board.toIOTypeD2(),
-                    label = IOType.D1(label.toMutableList()),
-                )
-//                println(
-//                    this.expect(
-//                        input = battleLine.board.toIOTypeD2(),
-//                    )
-//                )
-                break
-            }
-            battleLine = next
+        if (i % 10 == 0) println("epoc: $i, ${expect(dataset[0].input)}")
+        dataset.shuffled().take(200).onEach { (input, label) ->
+            this.train(input = input, label = label)
         }
     }
+
+//    for (i in 0..epoc) {
+//        if (i % 10 == 0) println("epoc: $i")
+//        var battleLine = BattleLine.create()
+//        while (true) {
+//            val next = battleLine.processByRandom()
+//            if (next is Phase.Finish) {
+//                val label = if (next.winner == Player.Left) listOf(1.0, 0.0) else listOf(0.0, 1.0)
+//                this.train(
+//                    input = battleLine.board.toIOTypeD2(),
+//                    label = IOType.D1(label.toMutableList()),
+//                )
+////                println(
+////                    this.expect(
+////                        input = battleLine.board.toIOTypeD2(),
+////                    )
+////                )
+//                break
+//            }
+//            battleLine = next
+//        }
+//    }
 }
 
 fun Network<IOType.D2, IOType.D1>.test2(): Network<IOType.D2, IOType.D1> = apply {
@@ -72,14 +79,14 @@ fun Network<IOType.D2, IOType.D1>.test2(): Network<IOType.D2, IOType.D1> = apply
         if (i % 10 == 0) println("epoc: $i")
         var battleLine = BattleLine.create()
         while (true) {
-            val next = battleLine.processByRandom()
+            val next = battleLine.processByCPU1()
             if (next is Phase.Finish) {
                 val expect = this.expect(input = battleLine.board.toIOTypeD2())
                 val correct = when (next.winner) {
                     Player.Left -> expect.value[0] > expect.value[1]
                     Player.Right -> expect.value[0] < expect.value[1]
                 }
-//                println(battleLine.board.toDisplayString())
+                println(battleLine.board.toDisplayString())
 //                println(next.board.toDisplayString())
                 println("expect: $expect, correct: $correct")
                 if (correct) count += 1
@@ -95,7 +102,7 @@ fun Network<IOType.D2, IOType.D1>.save2() {
     FILE.writeText(this.toJson())
 }
 
-private fun Board.toIOTypeD2() = IOType.D2(
+fun Board.toIOTypeD2() = IOType.D2(
     value = lines.flatMap { it.toNumList() }.toMutableList(),
     shape = listOf(6, 9),
 )

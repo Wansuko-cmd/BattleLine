@@ -6,7 +6,7 @@ import com.wsr.board.InComplete
 import com.wsr.board.Slots
 import com.wsr.board.Troop
 
-fun BattleLine.processByCPU1() = when (this) {
+fun BattleLine.processByCPU1(): BattleLine = when (this) {
     is Phase.Place -> this.process { lines, hand ->
         val (line, hand) = lines
             // lineごとに最も強くなり得るカードの組み合わせを検索
@@ -23,9 +23,9 @@ fun BattleLine.processByCPU1() = when (this) {
             // 最も強くなり得るlineを選択
             .maxBy { (_, _, formation) -> formation }
         line to hand
-    }
+    }.processByCPU1()
 
-    is Phase.Flag -> this.process()
+    is Phase.Flag -> this.process().processByCPU1()
     is Phase.Draw -> this.process()
     is Phase.Finish -> this
 }
